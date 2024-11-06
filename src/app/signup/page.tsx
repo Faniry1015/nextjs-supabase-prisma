@@ -3,7 +3,6 @@ import React from "react";
 
 interface SignUpFormData {
   name?: string;
-  phoneNumber?: string;
   role: 'ADMIN' | 'USER';
   email: string;
   city?: string;
@@ -14,11 +13,21 @@ function SignUp() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (!event.currentTarget) {
+      console.error("handleSubmit: event.currentTarget is null");
+      return;
+    }
+
     // Récupération des données du formulaire via FormData
     const formData = new FormData(event.currentTarget);
-    const data: SignUpFormData = Object.fromEntries(
+    const data = Object.fromEntries(
       formData.entries()
     ) as unknown as SignUpFormData;
+
+    if (!data.email) {
+      console.error("handleSubmit: email is empty");
+      return;
+    }
 
     const response = await fetch('/api/users', {
       method: 'POST',
@@ -26,7 +35,15 @@ function SignUp() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
+    }).catch((error) => {
+      console.error("handleSubmit: error while sending data to the server", error);
+      return;
     });
+
+    if (!response) {
+      console.error("handleSubmit: response is null");
+      return;
+    }
 
     // Affiche les données dans la console (à remplacer par votre logique)
     console.log("Données du formulaire:", data);
@@ -44,12 +61,6 @@ function SignUp() {
         </div>
 
         <div className="flex flex-col space-y-1">
-          <label htmlFor="phoneNumber" className="text-gray-600">Numéro de téléphone :</label>
-          <input type="tel" id="phoneNumber" name="phoneNumber" 
-                 className="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-        </div>
-
-        <div className="flex flex-col space-y-1">
           <label htmlFor="email" className="text-gray-600">
             Email <span className="text-red-500">*</span> :
           </label>
@@ -58,7 +69,7 @@ function SignUp() {
         </div>
 
         <div className="flex flex-col space-y-1">
-          <label htmlFor="city" className="text-gray-600">Adresse :</label>
+          <label htmlFor="city" className="text-gray-600">City :</label>
           <input type="text" id="city" name="city" 
                  className="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
         </div>

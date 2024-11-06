@@ -9,12 +9,18 @@ const prisma = new PrismaClient();
  * @param request - The incoming request
  * @returns A JSON response with the created user
  */
-async function POST(
+export async function POST(
     request: Request
 ): Promise<Response> {
-    const { body } = await request.json();
+    const {name, email, role, city} = await request.json();
+    console.log(name)
     const user = await prisma.user.create({
-        data: body,
+        data: {
+            name,
+            email,
+            role,
+            city,
+        },
     });
     return NextResponse.json({ user }, { status: 201 });
 }
