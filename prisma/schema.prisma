@@ -32,6 +32,7 @@ model User {
   country      String
   profile      ExtendedProfile?
   pets         Json
+  createdAt   DateTime @default(now())
 }
 
 model ExtendedProfile {
