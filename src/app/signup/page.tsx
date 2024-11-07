@@ -1,5 +1,5 @@
 'use client';
-import React from "react";
+import React, { useRef } from "react";
 
 interface SignUpFormData {
   name?: string;
@@ -9,6 +9,7 @@ interface SignUpFormData {
 }
 
 function SignUp() {
+  const formRef : React.RefObject<HTMLFormElement> = useRef(null);
   // Fonction de soumission du formulaire
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -45,13 +46,15 @@ function SignUp() {
       return;
     }
 
+    formRef.current?.reset()
+
     // Affiche les données dans la console (à remplacer par votre logique)
     console.log("Données du formulaire:", data);
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form onSubmit={handleSubmit} className="w-full max-w-md bg-white rounded-lg shadow-lg p-8 space-y-6">
+      <form ref={formRef} onSubmit={handleSubmit} className="w-full max-w-md bg-white rounded-lg shadow-lg p-8 space-y-6">
         <h2 className="text-2xl font-semibold text-center text-gray-700">Inscription</h2>
 
         <div className="flex flex-col space-y-1">
