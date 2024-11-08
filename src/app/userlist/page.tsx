@@ -1,8 +1,8 @@
-"use client"
+"use client";
 import React, { useEffect } from "react";
 
 const UserList = () => {
-  const [users, setUsers] = React.useState<Array<{name: string}>>([]);
+  const [users, setUsers] = React.useState<Array<{ name: string }>>([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -29,7 +29,17 @@ const UserList = () => {
     fetchUsers();
   }, []);
 
-  return <div>{users.map((user) => <div key={user.name}>{user.name}</div>)}</div>;
+  return (
+    <div>
+      <h1 className="text-3xl">Liste des utilisateurs enregistrés</h1>
+      <hr />
+      <ul>
+        {users.map((user) => (
+          <li key={user.name}>{user.name} - {user.email} - {user.role}</li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
 export default UserList;

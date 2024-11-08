@@ -21,6 +21,7 @@ model User {
   role         Role             @default(USER)
   posts        Post[]
   city         String?
+  password     String           @default("0000")
   country      String?
   createdAt   DateTime @default(now())
 }
