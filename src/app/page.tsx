@@ -6,6 +6,9 @@ export default function Home() {
         <li>
           <a href="/signup">S'inscrire</a>
         </li>
+        <li>
+          <a href="/userlist">Liste des utilisateurs</a>
+        </li>
       </ul>
     </div>
   );

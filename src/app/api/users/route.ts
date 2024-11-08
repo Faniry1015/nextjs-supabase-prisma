@@ -24,3 +24,16 @@ export async function POST(
     });
     return NextResponse.json({ user }, { status: 201 });
 }
+
+/**
+ * Handles HTTP GET requests to /api/users
+ *
+ * @param {Request} request - The incoming request
+ * @returns {Promise<Response>} A JSON response with an array of users
+ */
+export async function GET(
+    request: Request
+): Promise<Response> {
+    const users = await prisma.user.findMany()
+    return NextResponse.json(users, { status: 200 })
+}

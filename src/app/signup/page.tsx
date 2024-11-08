@@ -9,15 +9,10 @@ interface SignUpFormData {
 }
 
 function SignUp() {
-  const formRef : React.RefObject<HTMLFormElement> = useRef(null);
-  // Fonction de soumission du formulaire
+  const formRef: React.RefObject<HTMLFormElement> = useRef(null);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    if (!event.currentTarget) {
-      console.error("handleSubmit: event.currentTarget is null");
-      return;
-    }
 
     // Récupération des données du formulaire via FormData
     const formData = new FormData(event.currentTarget);
@@ -30,26 +25,27 @@ function SignUp() {
       return;
     }
 
-    const response = await fetch('/api/users', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    }).catch((error) => {
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        console.error("handleSubmit: Error in server response", response.statusText);
+        return;
+      }
+
+      formRef.current?.reset();
+
+      // Affiche les données dans la console (à remplacer par votre logique)
+      console.log("Données du formulaire:", data);
+    } catch (error) {
       console.error("handleSubmit: error while sending data to the server", error);
-      return;
-    });
-
-    if (!response) {
-      console.error("handleSubmit: response is null");
-      return;
     }
-
-    formRef.current?.reset()
-
-    // Affiche les données dans la console (à remplacer par votre logique)
-    console.log("Données du formulaire:", data);
   };
 
   return (
