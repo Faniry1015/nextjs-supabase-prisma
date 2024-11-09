@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useContext } from "react";
 import { useAuthContext } from "../context/authcontext/page";
 
 /**
@@ -8,57 +8,6 @@ import { useAuthContext } from "../context/authcontext/page";
  * @param {React.FormEvent<HTMLFormElement>} event - The form event
  * @returns {Promise<void>} A promise that resolves when the request is complete
  */
-const handleSubmit = async (
-  event: React.FormEvent<HTMLFormElement>
-): Promise<void> => {
-  event.preventDefault();
-  const formData = new FormData(event.currentTarget);
-  const userData = Object.fromEntries(formData.entries()) as {
-    email: string;
-    password: string;
-  };
-
-  if (!userData.email) {
-    console.error("handleSubmit: email is empty");
-    return;
-  }
-  console.log(userData)
-
-  try {
-    const response = await fetch("/api/authentification", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userData),
-    });
-
-    if (!response.ok) {
-      console.error(
-        "handleSubmit: Error in server response",
-        response.statusText
-      );
-      return;
-    }
-
-    const user = (await response.json()) as {
-      name: string;
-      email: string;
-      role: string;
-      city?: string;
-    };
-
-    if (!user) {
-      console.error("handleSubmit: user is empty");
-      return;
-    }
-    console.log(user)
-
-    // useAuthContext?.setUserContext(user);
-  } catch (error) {
-    console.error("Error fetching users:", error);
-  }
-};
 
 /**
  * Renders the sign in form.
@@ -68,6 +17,58 @@ const handleSubmit = async (
 const SignIn = (): JSX.Element => {
   const userContext = useAuthContext();
   const formRef = React.useRef<HTMLFormElement>(null);
+
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const userData = Object.fromEntries(formData.entries()) as {
+      email: string;
+      password: string;
+    };
+
+    if (!userData.email) {
+      console.error("handleSubmit: email is empty");
+      return;
+    }
+    console.log(userData);
+
+    try {
+      const response = await fetch("/api/authentification", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        console.error(
+          "handleSubmit: Error in server response",
+          response.statusText
+        );
+        return;
+      }
+
+      const user = (await response.json()) as {
+        name: string;
+        email: string;
+        role: string;
+        city?: string;
+      };
+
+      if (!user) {
+        console.error("handleSubmit: user is empty");
+        return;
+      }
+      console.log(user);
+      
+      userContext?.setUser(user);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
 
   return (
     <div className="max-w-md mx-auto p-4 bg-gray-100 rounded-lg shadow-md">

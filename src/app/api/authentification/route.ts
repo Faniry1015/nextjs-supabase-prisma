@@ -19,7 +19,7 @@ export const POST = async (request: Request) => {
         }
         console.log(user)
 
-        return NextResponse.json({ user} , { status: 201 });
+        return NextResponse.json(user , { status: 201 });
     } catch (error) {
         console.error("POST /api/authentification:", error);
         return NextResponse.json({ error: "Internal server error 2" }, { status: 500 });

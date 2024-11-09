@@ -1,13 +1,13 @@
 "use client";
 import { createContext, useContext, useState } from "react";
 
-interface AuthContextType {
+export interface AuthContextType {
   name: string | null;
   email: string | null;
   role: string | null;
   city: string | null;
-  setUserContext: (user: User) => void;
-  clearUserContext: () => void;
+  setUser: (user: User) => void;
+  clearUser: () => void;
 }
 
 export interface User {
@@ -17,24 +17,24 @@ export interface User {
   city: string;
 }
 
-const authContext = createContext<AuthContextType | undefined>(undefined);
+export const authContext = createContext<AuthContextType | undefined>(undefined);
 
 const AuthContextProvider = ({
   children,
 }: {
   children: React.ReactNode;
 }): JSX.Element => {
-  const [user, setUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-  const setUserContext = (user: User) : void => {
-    setUser(user);
+  const setUser = (user: User) : void => {
+    setCurrentUser(user);
   };
-  const clearUserContext = () : void => {
-    setUser(null);
+  const clearUser = () : void => {
+    setCurrentUser(null);
   };
 
   return (
-    <authContext.Provider value={{ ...user, setUserContext, clearUserContext }}>
+    <authContext.Provider value={{ ...currentUser, setUser, clearUser }}>
       {children}
     </authContext.Provider>
   );
