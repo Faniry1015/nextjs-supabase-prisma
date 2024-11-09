@@ -2,48 +2,72 @@
 import React from "react";
 import { useAuthContext } from "../context/authcontext/page";
 
-const SignIn = () => {
-  const userContext = useAuthContext();
-  const formRef = React.useRef<HTMLFormElement>(null);
+/**
+ * Handles user sign in.
+ *
+ * @param {React.FormEvent<HTMLFormElement>} event - The form event
+ * @returns {Promise<void>} A promise that resolves when the request is complete
+ */
+const handleSubmit = async (
+  event: React.FormEvent<HTMLFormElement>
+): Promise<void> => {
+  event.preventDefault();
+  const formData = new FormData(event.currentTarget);
+  const userData = Object.fromEntries(formData.entries()) as {
+    email: string;
+    password: string;
+  };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const data = Object.fromEntries(formData.entries());
+  if (!userData.email) {
+    console.error("handleSubmit: email is empty");
+    return;
+  }
+  console.log(userData)
 
-    if (!data.email) {
-      console.error("handleSubmit: email is empty");
+  try {
+    const response = await fetch("/api/authentification", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
+
+    if (!response.ok) {
+      console.error(
+        "handleSubmit: Error in server response",
+        response.statusText
+      );
       return;
     }
 
-    try {
-      const response = await fetch("/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+    const user = (await response.json()) as {
+      name: string;
+      email: string;
+      role: string;
+      city?: string;
+    };
 
-      if (!response.ok) {
-        console.error(
-          "handleSubmit: Error in server response",
-          response.statusText
-        );
-        return;
-      }
-
-      const user = await response.json();
-      if (!user) {
-        console.error("handleSubmit: user is empty");
-        return;
-      }
-
-      userContext?.setUserContext(user);
-    } catch (error) {
-      console.error("Error fetching users:", error);
+    if (!user) {
+      console.error("handleSubmit: user is empty");
+      return;
     }
-  };
+    console.log(user)
+
+    // useAuthContext?.setUserContext(user);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+  }
+};
+
+/**
+ * Renders the sign in form.
+ *
+ * @returns {JSX.Element} The sign in form
+ */
+const SignIn = (): JSX.Element => {
+  const userContext = useAuthContext();
+  const formRef = React.useRef<HTMLFormElement>(null);
 
   return (
     <div className="max-w-md mx-auto p-4 bg-gray-100 rounded-lg shadow-md">

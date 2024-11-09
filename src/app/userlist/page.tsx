@@ -35,7 +35,7 @@ const UserList = () => {
       <hr />
       <ul>
         {users.map((user) => (
-          <li key={user.name}>{user.name} - {user.email} - {user.role}</li>
+          <li key={user.name}>{user.name}</li>
         ))}
       </ul>
     </div>

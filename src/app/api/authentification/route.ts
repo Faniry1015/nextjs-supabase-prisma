@@ -3,19 +3,25 @@ import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-const POST = async (request: Request) => {
-    const { email, password } = await request.json();
-    const user = await prisma.user.findUnique({
-        where: { email },
-    });
+export const POST = async (request: Request) => {
+    try {
+        const { email, password } = await request.json();
+        const user = await prisma.user.findUnique({
+            where: { email },
+        });
 
-    if (!user) {
-        return NextResponse.json({ error: "L'utilisateur n'existe pas" }, { status: 400 });
-    }
+        if (!user) {
+            return NextResponse.json({ error: "L'utilisateur n'existe pas" }, { status: 400 });
+        }
 
-    if (user.password !== password) {
-        return NextResponse.json({ error: "Mot de passe incorrect" }, { status: 400 });
+        if (user.password.toString() !== password.toString()) {
+            return NextResponse.json({ error: "Mot de passe incorrect" }, { status: 400 });
+        }
+        console.log(user)
+
+        return NextResponse.json({ user} , { status: 201 });
+    } catch (error) {
+        console.error("POST /api/authentification:", error);
+        return NextResponse.json({ error: "Internal server error 2" }, { status: 500 });
     }
-    
-    return NextResponse.json({ user }, { status: 201 });
 };
