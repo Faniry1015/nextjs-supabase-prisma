@@ -24,9 +24,11 @@ const AuthContextProvider = ({
 }: {
   children: React.ReactNode;
 }): JSX.Element => {
+
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const setUser = (user: User) : void => {
+    console.log(user)
     setCurrentUser(user);
   };
   const clearUser = () : void => {

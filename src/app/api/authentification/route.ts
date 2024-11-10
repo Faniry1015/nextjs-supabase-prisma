@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export const POST = async (request: Request) => {
+export const POST = async (request: Request) : Promise<Response> => {
     try {
         const { email, password } = await request.json();
         const user = await prisma.user.findUnique({

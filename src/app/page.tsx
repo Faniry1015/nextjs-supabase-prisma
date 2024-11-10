@@ -1,12 +1,11 @@
 "use client"
-import { useState } from "react";
-import { useAuthContext, User } from "./context/authcontext/page";
+import { useAuthContext } from "./context/authcontext/page";
 
 export default function Home() {
-  const user = useAuthContext();
-  console.log(user)
+  const userContext = useAuthContext();
+  console.log(userContext)
 
-  if (!user.name) {
+  if (!userContext.email) {
     return (
       <div>
         <h1>Home</h1>
@@ -16,7 +15,6 @@ export default function Home() {
     );
 
   }
-// const [currentUser, SetCurrentUser] = useState<User | null>(null);
   return (
     <div>
       <h1>Home</h1>

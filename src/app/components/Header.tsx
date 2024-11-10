@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link';
 
 const Header = () : JSX.Element => {
   return (
@@ -7,16 +8,16 @@ const Header = () : JSX.Element => {
     <nav>
       <ul className="flex space-x-4">
         <li>
-          <a href="/">Home</a>
+          <Link href="/">Home</Link>
         </li>
         <li>
-          <a href="/signup">S'inscrire</a>
+          <Link href="/signup">S'inscrire</Link>
         </li>
         <li>
-          <a href="/userlist">Liste des utilisateurs</a>
+          <Link href="/userlist">Liste des utilisateurs</Link>
         </li>
         <li>
-          <a href="/signin">Se connecter</a>
+          <Link href="/signin">Se connecter</Link>
         </li>
       </ul>
     </nav>
