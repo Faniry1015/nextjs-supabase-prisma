@@ -1,45 +1,24 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
+import UserList from "./UserList";
 
-const UserList = () => {
-  const [users, setUsers] = React.useState<Array<{ name: string }>>([]);
+// Create a client
+const queryClient = new QueryClient();
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch("/api/users", {
-          method: "GET",
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const usersFromServer = await response.json();
-        if (!Array.isArray(usersFromServer)) {
-          throw new Error("Expected an array of users");
-        }
-
-        setUsers(usersFromServer);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
-    };
-
-    fetchUsers();
-  }, []);
-
+const UserListDataProvider = () => {
   return (
-    <div>
-      <h1 className="text-3xl">Liste des utilisateurs enregistrés</h1>
-      <hr />
-      <ul>
-        {users.map((user) => (
-          <li key={user.name}>{user.name}</li>
-        ))}
-      </ul>
-    </div>
+    // Provide the client to your App
+    <QueryClientProvider client={queryClient}>
+      <UserList />
+    </QueryClientProvider>
   );
 };
 
-export default UserList;
+export default UserListDataProvider;
