@@ -1,6 +1,6 @@
 "use client";
 import React, { useContext } from "react";
-import { useAuthContext } from "../context/authcontext/page";
+import { useAuthContext, User } from "../context/authcontext/page";
 
 /**
  * Handles user sign in.
@@ -51,12 +51,7 @@ const SignIn = (): JSX.Element => {
         return;
       }
 
-      const user = (await response.json()) as {
-        name: string;
-        email: string;
-        role: string;
-        city?: string;
-      };
+      const user : User = (await response.json())
 
       if (!user) {
         console.error("handleSubmit: user is empty");
