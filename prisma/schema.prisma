@@ -402,3 +402,31 @@ enum one_time_token_type {
 
   @@schema("auth")
 }
+
+// model User {
+//   id           Int              @id @default(autoincrement())
+//   name         String?
+//   email        String           @unique
+//   role         Role             @default(USER)
+//   posts        Post[]
+//   city         String?
+//   password     String           @default("0000")
+//   country      String?
+//   createdAt   DateTime @default(now())
+// }
+
+// model Post {
+//   id        Int     @id @default(autoincrement())
+//   title     String
+//   published Boolean @default(true)
+//   author    User    @relation(fields: [authorId], references: [id])
+//   authorId  Int
+//   comments  Json
+//   views     Int     @default(0)
+//   likes     Int     @default(0)
+// }
+
+// enum Role {
+//   USER
+//   ADMIN
+// }
